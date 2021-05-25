@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-import csv
 
 
 class BugsMusic(object):
@@ -8,25 +7,24 @@ class BugsMusic(object):
     # def __init__(self, url):
     #     self.url = url
     url = ''
+    class_name = []
 
     def __str__(self):
         return self.url
 
-    def scrap(self, class_name):
+    def scrap(self):
         soup = BeautifulSoup(urlopen(self.url), 'lxml')
         count = 0
-        print('< ARTIST >')
-        for i in soup.find_all(name='p', attrs=({"class": class_name[0]})):
+        print('=' * 40 + ' < ARTIST > ' + '=' * 40)
+        for i in soup.find_all(name='p', attrs=({"class": self.class_name[0]})):
             count += 1
-            print(f'{str(count)} RANKING')
-            print(f'{class_name[0]} : {i.find("a").text}')
+            print(f'{str(count)} {self.class_name[0]} : {i.find("a").text}')
 
         count = 0
-        print('< TITLE >')
-        for i in soup.find_all(name='p', attrs=({"class": class_name[1]})):
+        print('=' * 40 + ' < TITLE > ' + '=' * 40)
+        for i in soup.find_all(name='p', attrs=({"class": self.class_name[1]})):
             count += 1
-            print(f'{str(count)} RANKING')
-            print(f'{class_name[1]} : {i.find("a").text}')
+            print(f'{str(count)} {self.class_name[1]} : {i.find("a").text}')
 
     # https://music.bugs.co.kr/chart/track/realtime/total
     @staticmethod
@@ -39,8 +37,10 @@ class BugsMusic(object):
                 # bugs.url = input('input URL')
                 bugs.url = 'https://music.bugs.co.kr/chart/track/realtime/total'
             elif menu == '2':
-                print(f'input URL is {bugs.url}')
-                bugs.scrap(["artist", "title"])
+                # print(f'input URL is {bugs}')
+                bugs.class_name.append("artist")
+                bugs.class_name.append("title")
+                bugs.scrap()
             elif menu == '0':
                 exit()
             else:
