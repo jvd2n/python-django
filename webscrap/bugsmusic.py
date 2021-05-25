@@ -12,10 +12,23 @@ class BugsMusic(object):
     def __str__(self):
         return self.url
 
-    def scrap(self):
-        pass
-        # https://music.bugs.co.kr/chart/track/realtime/total
+    def scrap(self, class_name):
+        soup = BeautifulSoup(urlopen(self.url), 'lxml')
+        count = 0
+        print('< ARTIST >')
+        for i in soup.find_all(name='p', attrs=({"class": class_name[0]})):
+            count += 1
+            print(f'{str(count)} RANKING')
+            print(f'{class_name[0]} : {i.find("a").text}')
 
+        count = 0
+        print('< TITLE >')
+        for i in soup.find_all(name='p', attrs=({"class": class_name[1]})):
+            count += 1
+            print(f'{str(count)} RANKING')
+            print(f'{class_name[1]} : {i.find("a").text}')
+
+    # https://music.bugs.co.kr/chart/track/realtime/total
     @staticmethod
     def main():
         bugs = BugsMusic()
@@ -23,19 +36,11 @@ class BugsMusic(object):
             print('=' * 10 + ' MENU ' + '=' * 10)
             menu = input('1 INPUT_URL  2 RANK Top100 \n0 EXIT \n>> ')
             if menu == '1':
-                # bugs = Bugs(input('URL? '))
-                bugs.url = input('URL? ')
+                # bugs.url = input('input URL')
+                bugs.url = 'https://music.bugs.co.kr/chart/track/realtime/total'
             elif menu == '2':
-                soup = BeautifulSoup(urlopen(bugs.url), 'lxml')
-                n_rank = 0
-                print(f'Input URL is {bugs}\n')
-                print('-' * 40 + ' RANK TOP 100 ' + '-' * 40)
-                for li1, li2 in zip(soup.find_all("p", attrs=({"class": "title"})),
-                                    soup.find_all("p", attrs=({"class": "artist"}))):
-                    n_rank += 1
-                    print(f'{str(n_rank).rjust(3, "0")}\' {li1.find("a").text} - {li2.find("a").text}')
-                    if n_rank % 10 == 0:
-                        print('-' * 94)
+                print(f'input URL is {bugs.url}')
+                bugs.scrap(["artist", "title"])
             elif menu == '0':
                 exit()
             else:
