@@ -15,26 +15,33 @@ class BugsMusic(object):
     def set_url(self, detail):
         self.url = requests.get(f'{self.url}{detail}', headers=self.headers).text
         self.soup = BeautifulSoup(self.url, 'lxml')
-        self.title_ls = self.soup.find_all(name='p', attrs=({"class": self.class_name[0]}))
-        self.artist_ls = self.soup.find_all(name='p', attrs=({"class": self.class_name[1]}))
+        ls1 = self.soup.find_all(name='p', attrs=({"class": self.class_name[0]}))
+        ls2 = self.soup.find_all(name='p', attrs=({"class": self.class_name[1]}))
+        for i in ls1:
+            self.title_ls.append(i.find("a").text)
+        for j in ls2:
+            self.artist_ls.append(j.find("a").text)
 
     def get_ranking(self):
         print('------- 제목 --------')
-        for i in self.title_ls:
-            print(f'{i.find("a").text}')
+        print(self.title_ls)
         print('------ 가수 --------')
-        for i in self.artist_ls:
-            print(f'{i.find("a").text}')
+        print(self.artist_ls)
 
     def insert_title_dict(self):
         print('------- {\'제목\': \'가수\'} --------')
+        # 1
+        # for i in range(0, len(self.title_ls)):
+        #     self.title_dict[self.title_ls[i]] = self.artist_ls[i]
+        # 2
         for i, j in zip(self.title_ls, self.artist_ls):
-            self.title_dict[i.find("a").text] = j.find("a").text
+            self.title_dict[i] = j
+        # 3
+        # for i, j in enumerate(self.title_ls):
+        #     self.title_dict[j] = self.artist_ls[i]
         print(self.title_dict)
-        rank = 0
-        for i in self.title_dict.keys():
-            rank += 1
-            print(f'{rank}\' {i} - {self.title_dict[i]}')
+        for i, j in enumerate(self.title_dict.keys()):
+            print(f'{i}\' {j} - {self.title_dict[j]}')
 
     @staticmethod
     def main():
