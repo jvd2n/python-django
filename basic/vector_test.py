@@ -19,18 +19,20 @@ class VectorTest(object):
         self.read_list()
 
     def add_tuple(self, value):
-        pass
+        self.tp += value
+        print(f'\n{self.tp}\n')
 
     def read_tuple(self):
         print(f'\n{self.tp}\n')
 
-    def merge_tuple(self):
-        pass
+    def merge_tuple(self, value):
+        print(f'\n{self.tp + value}\n')
 
     def delete_tuple(self, value):
-        pass
+        print('Impossible Logic')
 
     def add_dict(self, value):
+        # self.dict['tom'] = 100
         a = list(value.keys())
         b = list(value.values())
         self.dict[a[0]] = b[0]
@@ -71,11 +73,11 @@ class VectorTest(object):
                 value = 786
                 v.delete_list(value)
             elif menu == '5':
-                pass
+                v.add_tuple((100,))
             elif menu == '6':
                 v.read_tuple()
             elif menu == '7':
-                pass
+                v.merge_tuple(tinytp)
             elif menu == '8':
                 pass
             elif menu == '9':
