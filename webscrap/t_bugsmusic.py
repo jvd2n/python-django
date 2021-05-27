@@ -46,27 +46,35 @@ class BugsMusic(object):
             print(f'{i}\' {j} - {self.dict[j]}')
 
     def dict_to_df(self):
-        # 1
         for i, j in zip(self.title_ls, self.artist_ls):
             self.dict[i] = j
         index_no = [i for i, j in enumerate(self.dict.keys())]
-        zp = zip(self.dict.keys(), self.dict.values())
-        self.df = pd.DataFrame(zp, index=index_no, columns=['artist', 'title'])
+        # 1
+        # zp = zip(self.dict.keys(), self.dict.values())
+        # self.df = pd.DataFrame(zp, index=index_no, columns=['artists', 'titles'])
 
         # 2
-        ls1 = [i for i in self.dict.keys()]
-        ls2 = [i for i in self.dict.values()]
-        
+        dt_values = [self.dict.keys(), self.dict.values()]
+        print(dt_values)
+        dt_keys = ['titles', 'artists']
+        n_dt = {}
+        # n_dt[dt_keys[0]] = dt_values[0]
+        # print(len(dt_keys))
+        for i in range(len(dt_keys)):
+            n_dt[dt_keys[i]] = dt_values[i]
+        self.df = pd.DataFrame(n_dt, index=index_no, columns=dt_keys)
+        return self.df
+
         # dt = self.dict
         # print(dt)
         # self.df = pd.DataFrame.from_dict(dt, orient='index')
-        return self.df
+        # return self.df
     
     def dict_to_dataframe(self):
         dt = self.dict
 
     def df_to_csv(self):
-        path = './data/bugs.csv'
+        path = './data/bugs1.csv'
         self.df.to_csv(path, sep=',', na_rep='NaN', mode='w', encoding='utf-8-sig')
 
     @staticmethod
