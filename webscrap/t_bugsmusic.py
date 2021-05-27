@@ -11,7 +11,7 @@ class BugsMusic(object):
     class_name = ['title', 'artist']
     title_ls = []
     artist_ls = []
-    title_dict = {}
+    dict = {}
     df = pd.DataFrame()
 
     def set_url(self, detail):
@@ -30,28 +30,40 @@ class BugsMusic(object):
         print('------ 가수 --------')
         print(self.artist_ls)
 
-    def insert_title_dict(self):
+    def insert_dict(self):
         print('------- {\'제목\': \'가수\'} --------')
         # 1
         # for i in range(0, len(self.title_ls)):
-        #     self.title_dict[self.title_ls[i]] = self.artist_ls[i]
+        #     self.dict[self.title_ls[i]] = self.artist_ls[i]
         # 2
         for i, j in zip(self.title_ls, self.artist_ls):
-            self.title_dict[i] = j
+            self.dict[i] = j
         # 3
         # for i, j in enumerate(self.title_ls):
-        #     self.title_dict[j] = self.artist_ls[i]
-        print(self.title_dict)
-        for i, j in enumerate(self.title_dict.keys()):
-            print(f'{i}\' {j} - {self.title_dict[j]}')
+        #     self.dict[j] = self.artist_ls[i]
+        print(self.dict)
+        for i, j in enumerate(self.dict.keys()):
+            print(f'{i}\' {j} - {self.dict[j]}')
 
     def dict_to_df(self):
+        # 1
         for i, j in zip(self.title_ls, self.artist_ls):
-            self.title_dict[i] = j
-        index_no = [i for i, j in enumerate(self.title_dict.keys())]
-        dt = zip(self.title_dict.keys(), self.title_dict.values())
-        self.df = pd.DataFrame(dt, index=index_no, columns=['titles', 'artists'])
+            self.dict[i] = j
+        index_no = [i for i, j in enumerate(self.dict.keys())]
+        zp = zip(self.dict.keys(), self.dict.values())
+        self.df = pd.DataFrame(zp, index=index_no, columns=['artist', 'title'])
+
+        # 2
+        ls1 = [i for i in self.dict.keys()]
+        ls2 = [i for i in self.dict.values()]
+        
+        # dt = self.dict
+        # print(dt)
+        # self.df = pd.DataFrame.from_dict(dt, orient='index')
         return self.df
+    
+    def dict_to_dataframe(self):
+        dt = self.dict
 
     def df_to_csv(self):
         path = './data/bugs.csv'
@@ -69,7 +81,7 @@ class BugsMusic(object):
             elif menu == '2':
                 bg.get_ranking()
             elif menu == '3':
-                bg.insert_title_dict()
+                bg.insert_dict()
             elif menu == '4':
                 print(bg.dict_to_df())
             elif menu == '5':
