@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import pandas as pd
 
 
 class BugsMusic(object):
@@ -11,6 +12,7 @@ class BugsMusic(object):
     title_ls = []
     artist_ls = []
     title_dict = {}
+    df = pd.DataFrame()
 
     def set_url(self, detail):
         self.url = requests.get(f'{self.url}{detail}', headers=self.headers).text
@@ -43,19 +45,35 @@ class BugsMusic(object):
         for i, j in enumerate(self.title_dict.keys()):
             print(f'{i}\' {j} - {self.title_dict[j]}')
 
+    def dict_to_df(self):
+        for i, j in zip(self.title_ls, self.artist_ls):
+            self.title_dict[i] = j
+        index_no = [i for i, j in enumerate(self.title_dict.keys())]
+        dt = zip(self.title_dict.keys(), self.title_dict.values())
+        self.df = pd.DataFrame(dt, index=index_no, columns=['titles', 'artists'])
+        return self.df
+
+    def df_to_csv(self):
+        path = './data/bugs.csv'
+        self.df.to_csv(path, sep=',', na_rep='NaN', mode='w', encoding='utf-8-sig')
+
     @staticmethod
     def main():
-        bugs = BugsMusic()
+        bg = BugsMusic()
         while 1:
-            menu = input('0-exit, 1-input time, 2-output 3-dict')
+            menu = input('0-exit, 1-input time, 2-output, 3-dict, 4-dataframe ')
             if menu == '0':
                 break
             elif menu == '1':
-                bugs.set_url(input('상세정보 입력'))  # wl_ref=M_contents_03_01
+                bg.set_url(input('상세정보 입력'))  # wl_ref=M_contents_03_01
             elif menu == '2':
-                bugs.get_ranking()
+                bg.get_ranking()
             elif menu == '3':
-                bugs.insert_title_dict()
+                bg.insert_title_dict()
+            elif menu == '4':
+                print(bg.dict_to_df())
+            elif menu == '5':
+                bg.df_to_csv()
             else:
                 print('Wrong Number')
                 continue
