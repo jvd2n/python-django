@@ -9,3 +9,5 @@ pandas~=1.2.4
 bs4~=4.9.3
 beautifulsoup4~=4.9.3
 selenium~=3.141.0
+matplotlib~=3.3.4
+seaborn~=0.11.1

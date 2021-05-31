@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass  # dataset 에 붙이는 어노테이션
 class Dataset(object):
     context: str
     fname: str
