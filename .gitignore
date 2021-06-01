@@ -1,7 +1,4 @@
-.venv
-venv/
 .idea/
-my_django/
 .env.dev
 
 
