@@ -22,11 +22,7 @@ if __name__ == '__main__':
             plot.draw_embarked()
         elif m == '2':
             ctrl = Controller()
-            r = ctrl.modeling('train.csv', 'test.csv')
-            # r = ctrl.preprocess('train.csv', 'test.csv')
-            print(type(r.train))
-            print(type(r.test))
-            print(r.train)
+            df = ctrl.modeling('train.csv', 'test.csv')
         elif m == '3':
             pass
         elif m == '4':
