@@ -1,6 +1,6 @@
 .idea/
 .env.dev
-
+venv/
 
 # Created by https://www.toptal.com/developers/gitignore/api/django,pycharm,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,pycharm,macos,windows
