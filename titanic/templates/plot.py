@@ -10,8 +10,8 @@ rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/H2GTRE.TTF
 
 class Plot(object):
 
-    dataset: object = Dataset()
-    service: object = Service()
+    dataset = Dataset()
+    service = Service()
 
     def __init__(self, fname):
         self.entity = self.service.new_model(fname)

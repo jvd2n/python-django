@@ -1,5 +1,10 @@
 from titanic.models.dataset import Dataset
 import pandas as pd
+import numpy as np
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
 
 
 class Service(object):
@@ -21,9 +26,10 @@ class Service(object):
         return this.train['Survived']
 
     @staticmethod
-    def drop_feature(this, feature) -> object:  # Delete useless data
-        this.train = this.train.drop([feature], axis=1)
-        this.test = this.test.drop([feature], axis=1)
+    def drop_feature(this, *feature) -> object:  # Delete useless data
+        for i in feature:
+            this.train = this.train.drop([i], axis=1)
+            this.test = this.test.drop([i], axis=1)
         return this
 
     @staticmethod
@@ -63,10 +69,6 @@ class Service(object):
         return this
 
     @staticmethod
-    def fare_band_fill_na(this) -> object:
-        return this
-
-    @staticmethod
     def gender_nominal(this) -> object:
         combine = [this.train, this.test]
         gender_mapping = {'male': 0, 'female': 1}
@@ -76,8 +78,48 @@ class Service(object):
 
     @staticmethod
     def age_ordinal(this) -> object:
+        combine = [this.train, this.test]
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
+        age_title_mapping = {'Unknown': 0, 'Baby': 1, 'Child': 2, 'Teenager': 3,
+                             'Student': 4, 'Young Adult': 5, 'Adult': 6, 'Senior': 7}
+        for dataset in combine:
+            dataset['Age'] = dataset['Age'].fillna(-0.5)
+            dataset['AgeGroup'] = pd.cut(dataset['Age'], bins=bins, labels=labels)
+            dataset['AgeGroup'] = dataset['AgeGroup'].map(age_title_mapping)
         return this
 
     @staticmethod
-    def create_k_fold(this) -> object:
+    def fare_ordinal(this) -> object:
+        # print(this.test[this.test.isna().any(axis=1)].isna())
+        this.test['Fare'] = this.test['Fare'].fillna(1)
+        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # print(this.train['FareBand'].head(10))
+        # bins = [-1, 7.91, 14.454, 31.0, np.inf]
+        # print(list(pd.qcut(this.train['Fare'], 4, retbins=True))[1])
+        res, bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))
+        print(res)
+        print(bins)
+        bins[0] = -1
+        bins[4] = np.inf
+        print(bins)
+        # list 구조로 0번 인덱스는 문자이며, 2번째 인덱스가구간 값.
+        for these in [this.train, this.test]:
+            these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1, 2, 3, 4])
         return this
+
+    @staticmethod
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)
+
+    @staticmethod
+    def accuracy_by_svm(this):
+        score = cross_val_score(RandomForestClassifier(),
+                                this.train,
+                                this.label,
+                                cv=KFold(n_splits=10,
+                                         shuffle=True,
+                                         random_state=0),
+                                n_jobs=1,
+                                scoring='accuracy')
+        return round(np.mean(score) * 100, 2)
