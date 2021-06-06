@@ -5,7 +5,7 @@ import pandas as pd
 
 class BugsMusic(object):
 
-    url = 'https://music.bugs.co.kr/chart/track/realtime/total?'
+    url = 'https://music.bugs.co.kr/chart/track/realtime/total'
     headers = {'User-Agent': 'Mozilla/5.0'}
     soup = BeautifulSoup()
     class_name = ['title', 'artist']
@@ -81,7 +81,8 @@ class BugsMusic(object):
     def main():
         bg = BugsMusic()
         while 1:
-            menu = input('0-exit, 1-input time, 2-output, 3-dict, 4-dataframe ')
+            menu = input('0-exit, '
+                         '1-input time, 2-output, 3-dict, 4-dataframe ')
             if menu == '0':
                 break
             elif menu == '1':
