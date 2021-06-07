@@ -1,6 +1,7 @@
+import django
 from titanic.views.controller import Controller
 from titanic.templates.plot import Plot
-
+print(f'Django ver : {django.VERSION}')
 
 if __name__ == '__main__':
     print('\'Hello!\'')
