@@ -17,9 +17,9 @@ if __name__ == '__main__':
             break
         elif m == '1':
             plot = Plot('train.csv')
-            # plot.draw_survived_dead()
-            # plot.draw_pclass()
-            # plot.draw_sex()
+            plot.draw_survived_dead()
+            plot.draw_pclass()
+            plot.draw_sex()
             plot.draw_embarked()
         elif m == '2':
             df = ctrl.modeling('train.csv', 'test.csv')
